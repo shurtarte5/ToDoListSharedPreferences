@@ -7,10 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hurtarte.listmaker2.model.TaskList
 
-class ListSelectionRecyclerViewAdapter(private val lists: ArrayList<TaskList>):
+class ListSelectionRecyclerViewAdapter(private val lists: ArrayList<TaskList>,
+                                       val clickListener:ListSelectionRecyclerViewClickListener):
     RecyclerView.Adapter<ListSelectionRecyclerViewAdapter.ListSelectionViewHolder>() {
 
    // val listTitles = arrayOf( "Shopping List" , "Chores" , "Android Tutorials")
+
+    interface ListSelectionRecyclerViewClickListener {
+        fun listItemClicked (list: TaskList )
+    }
 
     inner class ListSelectionViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView)
     {
@@ -33,6 +38,10 @@ class ListSelectionRecyclerViewAdapter(private val lists: ArrayList<TaskList>):
     override fun onBindViewHolder(holder: ListSelectionViewHolder, position: Int) {
         holder.listPosition.text=(position + 1).toString()
         holder.listTitle.text=lists.get(position).name
+        holder.itemView.setOnClickListener {
+            clickListener.listItemClicked(lists[position])
+        }
+
     }
 
     override fun getItemCount(): Int {
